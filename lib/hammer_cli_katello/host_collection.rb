@@ -190,6 +190,11 @@ module HammerCLIKatello
     subcommand HammerCLIKatello::HostCollectionErratumCommand.command_name,
                HammerCLIKatello::HostCollectionErratumCommand.desc,
                HammerCLIKatello::HostCollectionErratumCommand
+
+    require 'hammer_cli_katello/host_collection_subscription'
+    subcommand HammerCLIKatello::HostCollectionSubscriptionCommand.command_name,
+               HammerCLIKatello::HostCollectionSubscriptionCommand.desc,
+               HammerCLIKatello::HostCollectionSubscriptionCommand
   end
 
 end

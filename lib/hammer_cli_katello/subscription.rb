@@ -15,12 +15,11 @@ module HammerCLIKatello
         field :contract_number, _("Contract")
         field :account_number, _("Account")
         field :support_level, _("Support")
-        field :quantity, _("Quantity")
+        field :format_quantity, _("Quantity")
         field :consumed, _("Consumed")
         field :end_date, _("End Date")
         field :id, _("ID")
         field :product_name, _("Product")
-        field :format_quantity, _("Quantity")
         field :consumed, _("Attached")
       end
 
@@ -94,6 +93,62 @@ module HammerCLIKatello
       end
 
       build_options
+    end
+
+    class AttachCommand < HammerCLIKatello::ListCommand
+      command_name "attach"
+      resource :subscriptions, :create
+
+      output do
+        field :product_name, _("Name")
+        field :contract_number, _("Contract")
+        field :account_number, _("Account")
+        field :support_level, _("Support")
+        field :format_quantity, _("Quantity")
+        field :consumed, _("Consumed")
+        field :end_date, _("End Date")
+        field :id, _("ID")
+        field :product_name, _("Product")
+        field :consumed, _("Attached")
+      end
+
+      def extend_data(data)
+        data["format_quantity"] = data["quantity"] == -1 ? _("Unlimited") : data["quantity"]
+        data
+      end
+
+      def request_params
+        params = super
+        params['quantity'] = -1 unless params['quantity']  # Indicates automatic quantity
+        params
+      end
+
+      build_options :without => [:subscriptions]
+    end
+
+    class UnattachCommand < HammerCLIKatello::ListCommand
+      command_name "unattach"
+      resource :subscriptions, :destroy
+
+      output do
+        field :product_name, _("Name")
+        field :contract_number, _("Contract")
+        field :account_number, _("Account")
+        field :support_level, _("Support")
+        field :format_quantity, _("Quantity")
+        field :consumed, _("Consumed")
+        field :end_date, _("End Date")
+        field :id, _("ID")
+        field :product_name, _("Product")
+        field :consumed, _("Attached")
+      end
+
+      def extend_data(data)
+        data["format_quantity"] = data["quantity"] == -1 ? _("Unlimited") : data["quantity"]
+        data
+      end
+
+      build_options :without => [:subscriptions]
     end
 
     autoload_subcommands
