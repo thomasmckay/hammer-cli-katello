@@ -74,6 +74,16 @@ module HammerCLIKatello
       output do
         field :uuid, _("ID")
         field :name, _("Name")
+        from :environment do
+          field :name, _("Lifecycle Environment")
+        end
+        from :content_view do
+          field :name, _("Content View")
+        end
+        from :errata_counts do
+          field :total, _("Installable Errata")
+        end
+        field :entitlementStatus, _("Entitlement Status")
       end
 
       build_options

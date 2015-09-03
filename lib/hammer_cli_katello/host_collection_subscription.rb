@@ -34,6 +34,9 @@ module HammerCLIKatello
       command_name "auto-attach"
 
       build_options
+
+      success_message _("Auto-attach subscriptions completed on content hosts in collection")
+      failure_message _("Unable to auto-attach subscriptions to content hosts in collection")
     end
 
     class AddSubscriptionsCommand < HammerCLIKatello::SingleResourceCommand
