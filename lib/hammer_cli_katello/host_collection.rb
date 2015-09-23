@@ -147,10 +147,6 @@ module HammerCLIKatello
     class ContentBaseCommand < DeleteCommand
       resource :systems_bulk_actions
 
-      build_options do |o|
-        o.without(:content_type, :content, :ids, :search)
-      end
-
       def request_params
         params = super
         params['content'] = content
@@ -174,16 +170,28 @@ module HammerCLIKatello
     class InstallContentBaseCommand < ContentBaseCommand
       action :install_content
       command_name "install"
+
+      build_options do |o|
+        o.without(:content_type, :content, :ids, :search)
+      end
     end
 
     class UpdateContentBaseCommand < ContentBaseCommand
       action :update_content
       command_name "update"
+
+      build_options do |o|
+        o.without(:content_type, :content, :ids, :search)
+      end
     end
 
     class RemoveContentBaseCommand < ContentBaseCommand
       action :remove_content
       command_name "remove"
+
+      build_options do |o|
+        o.without(:content_type, :content, :ids, :search)
+      end
     end
 
     class SubscriptionBaseCommand < DeleteCommand
@@ -204,6 +212,9 @@ module HammerCLIKatello
         api = HammerCLI::Connection.get("foreman").api
         custom_resolver = Class.new(HammerCLIKatello::IdResolver) do
           def systems_bulk_action_id(options)
+            host_collection_id(options)
+          end
+          def systems_id(options)
             host_collection_id(options)
           end
         end
