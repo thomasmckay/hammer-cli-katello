@@ -186,6 +186,31 @@ module HammerCLIKatello
       command_name "remove"
     end
 
+    class SubscriptionBaseCommand < DeleteCommand
+      resource :systems_bulk_actions
+
+      build_options do |o|
+        o.without(:ids, :search)
+      end
+
+      def request_params
+        params = super
+        params['included'] = { :search => "host_collection_ids:#{params['id']}" }
+        params.delete('id')
+        params
+      end
+
+      def resolver
+        api = HammerCLI::Connection.get("foreman").api
+        custom_resolver = Class.new(HammerCLIKatello::IdResolver) do
+          def systems_bulk_action_id(options)
+            host_collection_id(options)
+          end
+        end
+        custom_resolver.new(api, HammerCLIKatello::Searchables.new)
+      end
+    end
+
     require 'hammer_cli_katello/host_collection_package'
     subcommand HammerCLIKatello::HostCollectionPackageCommand.command_name,
                HammerCLIKatello::HostCollectionPackageCommand.desc,

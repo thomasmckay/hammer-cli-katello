@@ -3,35 +3,38 @@ module HammerCLIKatello
     command_name "subscription"
     desc _("Manipulate subscriptions for a host collection")
 
-    class ListSubscriptionsCommand < HammerCLIKatello::ListCommand
+    class ListSubscriptionsCommand < HammerCLIKatello::HostCollection::SubscriptionBaseCommand
       command_name "list"
-      resource :systems_bulk_actions
       action :subscriptions
+
+      build_options do |o|
+        o.without(:ids, :search)
+      end
 
       #option "--id", "ID", _("ID of host collection"),
       #       :attribute_name => :option_id
       #option "--name", "NAME", _("Name of host collection"),
       #       :attribute_name => :option_name
-      build_options do |o|
-        o.without(:ids, :search)
-      end
+      #build_options do |o|
+      #  o.without(:ids, :search)
+      #end
 
-      def request_params
-        params = super
-        params['included'] = { :search => "host_collection_ids:#{params['id']}" }
-        params.delete('id')
-        params
-      end
+      #def request_params
+      #  params = super
+      #  params['included'] = { :search => "host_collection_ids:#{params['id']}" }
+      #  params.delete('id')
+      #  params
+      #end
 
-      def resolver
-        api = HammerCLI::Connection.get("foreman").api
-        custom_resolver = Class.new(HammerCLIKatello::IdResolver) do
-          def systems_bulk_action_id(options)
-            host_collection_id(options)
-          end
-        end
-        custom_resolver.new(api, HammerCLIKatello::Searchables.new)
-      end
+      # def resolver
+      #   api = HammerCLI::Connection.get("foreman").api
+      #   custom_resolver = Class.new(HammerCLIKatello::IdResolver) do
+      #     def systems_bulk_action_id(options)
+      #       host_collection_id(options)
+      #     end
+      #   end
+      #   custom_resolver.new(api, HammerCLIKatello::Searchables.new)
+      # end
 
       output do
         field :product_name, _("Name")
