@@ -8,8 +8,8 @@ module HammerCLIKatello
       resource :systems_bulk_actions
       action :subscriptions
 
-      option "--id", "ID", _("ID of host collection"),
-             :attribute_name => :option_id
+      #option "--id", "ID", _("ID of host collection"),
+      #       :attribute_name => :option_id
       #option "--name", "NAME", _("Name of host collection"),
       #       :attribute_name => :option_name
       build_options do |o|
